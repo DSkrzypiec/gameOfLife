@@ -1,0 +1,4 @@
+g++ \
+main.cpp \
+-O3 -Wall -Wpedantic -std=c++17 -lSDL2 \
+-o gameOfLife
