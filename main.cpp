@@ -24,9 +24,9 @@ int main()
     {
         quit = std::chrono::steady_clock::now() - start > std::chrono::seconds(15);
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(500));
-        rect.x += 10;
-        rect.y += 7;
+        std::this_thread::sleep_for(std::chrono::milliseconds(30));
+        rect.x += 3;
+        rect.y += 1;
 
         if (rect.x > 620) {
             rect.x = 0;
