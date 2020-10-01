@@ -9,14 +9,12 @@ public:
     Box(int x_pos, int y_pos) : _xPos{x_pos}, _yPos{y_pos} {};
     void add_to_render(SDL_Renderer* renderer);
     void move(int x_shift, int y_shift);
+    int size();
 private:
     int _xPos = 0;
     int _yPos = 0;
 
-    const int _delta = 2;
-    const int _size = 15;
-    const int _maxX = 620;
-    const int _maxY = 480;
+    const int _size = 10;
 };
 
 #endif // Box
