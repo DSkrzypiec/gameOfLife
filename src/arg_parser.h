@@ -13,4 +13,6 @@ public:
     EntryParameters parse(int argc, char** argv);
 private:
     EntryParameters default_params();
+    void print_help();
+    EntryParameters parse_and_valid(char** argv);
 };
