@@ -6,20 +6,24 @@
 #include "box.h"
 #include "game_ui.h"
 #include "grid.h"
+#include "arg_parser.h"
 
 
-int main()
+int main(int argc, char** argv)
 {
-    SDL_Init(SDL_INIT_EVERYTHING);
+    ArgParser parser;
+    auto args = parser.parse(argc, argv);
 
+    SDL_Init(SDL_INIT_EVERYTHING);
     SDL_Window* window = SDL_CreateWindow("Game of Life", SDL_WINDOWPOS_UNDEFINED,
-            SDL_WINDOWPOS_UNDEFINED, 800, 800, SDL_WINDOW_SHOWN);
-    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, 
+            SDL_WINDOWPOS_UNDEFINED, args.grid_size * 10, args.grid_size * 10,
+            SDL_WINDOW_SHOWN);
+    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1,
             SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     SDL_Event event;
 
-    Grid g(80);
-    g.sample_init_population(0.60);
+    Grid g(args.grid_size);
+    g.sample_init_population(args.alive_percent);
 
     GameUI ui(window, renderer);
     auto start = std::chrono::steady_clock::now();
@@ -27,7 +31,7 @@ int main()
 
     while (!quit && SDL_WaitEvent(&event))
     {
-        quit = std::chrono::steady_clock::now() - start > std::chrono::seconds(20);
+        quit = std::chrono::steady_clock::now() - start > std::chrono::seconds(args.timeout_seconds);
 
         switch(event.type) {
             case SDL_QUIT:
@@ -44,8 +48,6 @@ int main()
         ui.render();
         g.next_generation();
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        std::this_thread::sleep_for(std::chrono::milliseconds(args.refresh_milliseconds));
     }
-
-    return 0;
 }
