@@ -22,7 +22,7 @@ EntryParameters ArgParser::parse(int argc, char** argv)
 
 EntryParameters ArgParser::default_params()
 {
-    EntryParameters args = { 80, 0.35, 100, 120 };
+    EntryParameters args = { 80, 0.25, 150, 30 };
     return args;
 }
 
