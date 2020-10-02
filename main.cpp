@@ -16,26 +16,35 @@ int main()
             SDL_WINDOWPOS_UNDEFINED, 800, 800, SDL_WINDOW_SHOWN);
     SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, 
             SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    SDL_Event event;
 
     Grid g(80);
-    g.sample_init_population(0.10);
+    g.sample_init_population(0.60);
 
     GameUI ui(window, renderer);
     auto start = std::chrono::steady_clock::now();
     bool quit = false;
 
-    while (!quit)
+    while (!quit && SDL_WaitEvent(&event))
     {
-        quit = std::chrono::steady_clock::now() - start > std::chrono::seconds(60);
+        quit = std::chrono::steady_clock::now() - start > std::chrono::seconds(20);
+
+        switch(event.type) {
+            case SDL_QUIT:
+                quit = true;
+
+            case SDL_KEYDOWN:
+                if (event.key.keysym.sym == SDLK_ESCAPE) {
+                    quit = true;
+                }
+        }
 
         ui.clear_render();
         g.render(ui.get_renderer());
-        //g.print_raw();
         ui.render();
         g.next_generation();
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(300));
-        //std::this_thread::sleep_for(std::chrono::seconds(12));
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
 
     return 0;
